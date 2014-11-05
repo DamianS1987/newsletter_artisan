@@ -5,7 +5,7 @@ Newsletter Artisan allows you to create dynamic newsletters using your posts for
 
 Newsletter developers can use Newsletter Artisan to create new themes inside of Wordpress CMS. To get the data all you have to do is to use Mustache syntax and reference objects documented.
 
-* How to add Newsletter Artisan plugin to Wordpress
+## How to add Newsletter Artisan plugin to Wordpress
 
 1. move 'newsletter_artisan' folder to 'src/wp-content/plugins/' directory of your project
 2. move 'newsletter_artisan.php' file to 'src/wp-content/themes/[your theme name]/' directory of your project
