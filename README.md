@@ -16,3 +16,7 @@ Newsletter developers can use Newsletter Artisan to create new themes inside of 
 Done. After following those steps you should see 'Artisan' section inside of the Wordpress panel. You can start creating your own themes.
 
 You can start from coping the code from 'nesletter_artisan/template_snippets/'. You should have 2 very basic themes added.
+
+## More information
+
+For more documentation go to github wiki page.
