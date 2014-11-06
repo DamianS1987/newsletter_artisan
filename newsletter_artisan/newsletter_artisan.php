@@ -2,7 +2,7 @@
    /*
    *Plugin Name: Newsletter Artisan
    *Description: Newsletter Artisan is a dynamic newsletter builder. It was created to allow you to build a showcase of newsletters with dynamic content from reusable themes.
-   *Version: 0.8.2
+   *Version: 0.8.3
    *Author: Damian Stefaniak
    *Author URI: http://www.dcthomson.co.uk
    */
@@ -18,8 +18,10 @@
    */
 
     //add styles for the admin ui
-    wp_enqueue_style( 'anewsletter', plugins_url('admin/res/anewsletter.css', __FILE__) );
-    wp_enqueue_script( 'anscript', plugins_url('admin/res/anscript.js', __FILE__), $js_deps );
+    if (is_admin()) {
+	    wp_enqueue_style( 'anewsletter', plugins_url('admin/res/anewsletter.css', __FILE__) );
+	    wp_enqueue_script( 'anscript', plugins_url('admin/res/anscript.js', __FILE__), $js_deps );
+	}
 
     function artisan_activation() {}
     function artisan_deactivation() {}
