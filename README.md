@@ -19,4 +19,5 @@ You can start from coping the code from 'nesletter_artisan/template_snippets/'. 
 
 ## More information
 
+
 For more documentation go to project's github wiki page.
