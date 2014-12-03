@@ -63,19 +63,19 @@
 			<p>The newsletter builder creates newsletter page HTML structure populated by selected posts. You can choose the theme and make some theme customizations in the 'theme' menu.</p>
 			<h4>How to start</h4>
 			<ul>
-				<li>Choose the articles you want to display - only articles from 2 days are available by default.</li>
+				<li>Choose the articles you want to display - articles from 2 days are available by default (this should be added to options soon).</li>
 				<li>Click 'publish' if you are sure about the content of your newsletter.</li>
 				<li>After successful update copy newsletter link to clipboard and go to your newsletter project in Adestra.</li>
-				<li>Use 'Load URL' option in Adestra panel to copy the newsletter HTML code to Adestra platform.</li>
+				<li>Use 'Load URL' option e.g. in Adestra panel to copy the newsletter HTML code to the platform.</li>
 				<li>Remember that Adestra copies the newsletter HTML structure not reference to it. If you use 'Load URL' to create a project and then go to wordpress newsletter plugin to make ammendments they won't be visible in you Adestra project until you use 'Load URL' to update the project again.</li>
 			</ul>
 			<h4>Support</h4>
-			<p>If you have got any doubts, questions, or suggestions how to improve the plugin please contact - dstefaniak@dcthomson.co.uk</p>
+			<p>If you have got any doubts, questions, or suggestions how to improve the plugin please contact - damianstefaniak1987@gmail.com</p>
 	</div>
 	<div class="server_feed">
 		<div class="feedback">
-			<p class="suc">Your newsletter is ready for you. Please copy the link below and go to Adestra. Use the 'Load URL' option.</p>
-			<p class="err">Ooops something went wrong. If that message will appear again contact 'dstefaniak@dcthomson.co.uk'.
+			<p class="suc">Your newsletter is ready for you. Click the link to preview or copy the link below and go to Adestra. Use the 'Load URL' option.</p>
+			<p class="err">Ooops something went wrong. <br><span class="additional_help"></span></p>
 		</div>
 		<div class="link"><a target="_blank" href="<?php echo $archive_pages[0]->guid; ?>"><?php echo $archive_pages[0]->guid; ?></a></div>
 	</div>

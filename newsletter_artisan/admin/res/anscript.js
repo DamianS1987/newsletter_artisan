@@ -9,8 +9,26 @@
 		var inputElems = $('.adestra_post .an_elem input'),
 			inputLen = $('.adestra_post .an_elem input').length;
 
-		//onsubmit
+		function error_information( resp_string ) {
+			var msg = '';
 
+			switch (resp_string) {
+				case 'select_posts':
+					var msg = 'You have to select some posts for the newsletter before you click Publish.';
+				break;
+				case 'create_one_na_page':
+					var msg = 'You have to create a wordpress page using "Newsletter Artisan" template. Remember to use the template only for ONE page. (see Readme file)';
+				break;
+				case 'no_active_theme':
+					var msg = 'You have to create and activate a theme before you publish anything';
+				break;
+				default:
+					var msg = 'If that message will appear again contact "dstefaniak@dcthomson.co.uk"';
+			}
+			$('.server_feed .err .additional_help').text( msg );
+		}
+
+		//onsubmit
 		function onANSubmit () {
 			/* check which posts were ticked */
 			var newPosts = []
@@ -43,6 +61,7 @@
 							});
 							$('.link').fadeIn(800);
 						} else {
+							error_information( response );
 							$('.err').fadeIn(800);
 						}
 					});
@@ -276,9 +295,7 @@
 					};
 					//post data
 					that.fetch( data, callback, that );
-
 				}
-
 			},
 			uploadFile: function () {
 				var that = this;
@@ -644,6 +661,10 @@
 		$('.themeChange_ui').on('click', '.edit', function () {
 			editor.show_editor(true, $(this) );
 			editor.loader(true);
+		});
+
+		$('.themeChange_ui').on('click', '.theme.active', function () {
+			alert('you cannot edit active theme');
 		});
 
 		$('.editTheme_ui').on('click', '.close_edit', function () {

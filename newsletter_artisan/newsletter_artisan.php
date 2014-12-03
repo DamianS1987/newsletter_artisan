@@ -1,10 +1,10 @@
 <?php
    /*
    *Plugin Name: Newsletter Artisan
-   *Description: Newsletter Artisan is a dynamic newsletter builder. It was created to allow you to build a showcase of newsletters with dynamic content from reusable themes.
-   *Version: 0.8.3
+   *Description: Newsletter Artisan is a dynamic newsletter builder. It was created to allow you to build a showcase of newsletters with dynamic content.
+   *Version: 0.8.5
    *Author: Damian Stefaniak
-   *Author URI: http://www.dcthomson.co.uk
+   *Author URI: http://www.dcthomson.co.uk and htttp://dstefaniak.co.uk
    */
 
     //add styles and scripts for the admin ui
@@ -29,6 +29,7 @@
 	function newsletter_posts_pick() {
 		//check if the user is allowed to create the newsletter
 		//for now we are going to allow most of the users
+
 		if ( !current_user_can( 'manage_options' ) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
@@ -49,8 +50,8 @@
 	}
 
 	function adestra_init() {
-		add_menu_page( 'adestra_newsletter', 'Artisan', 'manage_options', 'adestra_newsletter_id', 'newsletter_posts_pick', plugins_url('admin/res/newsletter_icon.png', __FILE__), 9);
-		add_submenu_page( 'adestra_newsletter_id', 'sub', 'Theme change', 'adestra_theme', 'theme_adestra_pick', 'theme_change');
+		add_menu_page( 'adestra_newsletter', 'Artisan', 'manage_options', 'adestra_newsletter_id', 'newsletter_posts_pick', plugins_url('admin/res/newsletter_icon.png', __FILE__) );
+		add_submenu_page( 'adestra_newsletter_id', 'sub', 'Theme change', 'manage_options', 'theme_adestra_pick', 'theme_change');
 	}
 
 	add_action( 'admin_menu', 'adestra_init' );
@@ -125,19 +126,46 @@
 	//posts selected for newsletter
 	function select_posts () {
 		global $wpdb;
-
 		$my_data = $_POST['posts'];
+		$na_opts = get_option('newsletter_artisan');
 
-		if (is_admin() &&  is_array( $my_data ) ) {
+		/* get the link to the newsletter page 
+		* search for the url for the page where the 'newsletter_artisan was used
+		*/
+		$archive_pages_args = array(
+		    'meta_key' => '_wp_page_template',
+		    'meta_value' => 'newsletter_artisan.php'
+		);
+		$archive_pages = get_pages( $archive_pages_args );
+
+		if (is_admin() &&  is_array( $my_data ) && !is_null( $na_opts['active_theme'] ) && count( $archive_pages ) === 1 ) {
 			mark_posts( $my_data );
 			echo "true";
+
+		}
+		/* validate select posts page
+		* - check if a theme is activated - you have to activate it as soon as you install the plugin
+		* - check if there is a wordpress page using 'newsletter_artisan' template already created - it's needed to display the newsletter
+		* - check if any posts were selected when submit
+		*/
+		elseif ( is_null( $na_opts['active_theme'] ) ) {
+			echo "no_active_theme";
+		} elseif ( count( $archive_pages ) !== 1 ) {
+			echo 'create_one_na_page';
+		} elseif ( !is_array( $my_data ) ) {
+			echo "select_posts";
 		} else {
 			echo "Something went wrong";
 		}
-		die();
+		die();		
 	}
 	
-	/* Creta Theme */
+
+
+
+
+
+	/* Creat a Theme */
 	class Theme {
 		private $theme_name = "";
 		private $template_html = "start building your mustache template now!";
@@ -152,24 +180,23 @@
 				);
 
 			//create new table in db if doesn't exist
-			if ( isset($o['themes']) ) {
-
-				if ( in_array ($new_dir, $o['themes'] ) ) {
-					echo "This name already exist";
-				} else {
-					$o['themes'][$new_dir] = $theme_details;
-					update_option('newsletter_artisan', $o);
-					echo "created";
-				}			
-			} else {
-				if (add_option('newsletter_artisan', array('themes'=> array() ) )) {
-					$o = get_option('newsletter_artisan');
-					$o['themes'][$new_dir] = $theme_details;
-					echo "created";
-				} else {
-					echo "there was a problem creating the theme";
-				}
+			if ( !isset($o['themes']) ) {
+				add_option('newsletter_artisan', array('themes'=> array() ) );
 			}
+
+			//check if the theme name already exists
+			if ( !in_array($new_dir, $o['themes'] ) ) {
+
+				$o['themes'][$new_dir] = $theme_details;
+				update_option('newsletter_artisan', $o);
+				echo "created";
+
+			} else {
+				echo "This name already exist";
+			}			
+
+
+			//var_dump('new theme name chosen: ', $o, $new_dir);
 		}
 
 		public function renameTheme ( $name, $new_theme ) {
@@ -190,7 +217,14 @@
 
 		public function editTemplate ( $theme_name ) {
 			$o = get_option('newsletter_artisan');
+
+
+
+
 			$code = $o['themes'][$theme_name]['template'];
+
+
+//var_dump($code);
 
  			wp_editor($code, 'code_editor', 
  				array(
@@ -202,10 +236,19 @@
 
 		public function saveTemplate($theme_name, $text) {
 			/* due to restrications in the produciton use db to store templates */
-			$o = get_option('newsletter_artisan');
-			$o['themes'][$theme_name]['template'] = htmlentities( $text , ENT_QUOTES );
 
-			update_option("newsletter_artisan", $o);
+			if ( !empty( $theme_name ) && !empty( $text )) {
+
+				$o = get_option('newsletter_artisan');
+
+				$o['themes'][$theme_name]['template'] = htmlentities( $text , ENT_QUOTES );
+
+				update_option("newsletter_artisan", $o);
+			}
+
+//var_dump('save template: ', $o, $theme_name, $text);
+
+
 			echo "updated";
 		}
 
@@ -288,6 +331,8 @@
 		}
 		die();
 	}
+
+//delete_option('newsletter_artisan');
 
 	/* END - Create theme */
 
