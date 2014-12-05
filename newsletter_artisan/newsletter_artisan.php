@@ -66,17 +66,21 @@
 		* unmark the unchecked posts
 		*/
 		//get Posts Data
+
+
+
 		$args = array(
 		'posts_per_page'   => 120,
 		'offset'           => 0,
 		'category'         => '',
+		'category_name'   => '',
 		'orderby'          => 'post_date',
 		'order'            => 'DESC',
 		'include'          => '',
 		'exclude'          => '',
 		'meta_key'         => '',
 		'meta_value'       => '',
-		'post_type'        => get_post_types(),
+		'post_type'        => 'post',
 		'post_mime_type'   => '',
 		'post_parent'      => '',
 		'post_status'      => 'publish',
@@ -87,6 +91,7 @@
 		$yesterday = strtotime("yesterday");
 
 		foreach ( $posts_array as $post) {
+
 			$postDate = $post->post_date;
 			$postDay = substr( $postDate, 0, 10);
 			$postToTime = strtotime($postDay);
