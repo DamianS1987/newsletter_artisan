@@ -645,10 +645,10 @@
 		});
 
 		$('.ui_wrapper.three .save_and_close').on('click', function() {
-			//close
-			$('.newTheme_ui .close').trigger('click');
 			//post the code to the server
 			theme.saveTemplate();
+			//close
+			$('.newTheme_ui .close').trigger('click');
 		});
 
 

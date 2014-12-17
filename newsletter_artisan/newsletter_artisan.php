@@ -2,7 +2,7 @@
    /*
    *Plugin Name: Newsletter Artisan
    *Description: Newsletter Artisan is a dynamic newsletter builder. It was created to allow you to build a showcase of newsletters with dynamic content.
-   *Version: 0.8.5
+   *Version: 0.8.6
    *Author: Damian Stefaniak
    *Author URI: http://www.dcthomson.co.uk and htttp://dstefaniak.co.uk
    */
@@ -66,8 +66,6 @@
 		* unmark the unchecked posts
 		*/
 		//get Posts Data
-
-
 
 		$args = array(
 		'posts_per_page'   => 120,
@@ -164,11 +162,11 @@
 		}
 		die();		
 	}
-	
 
-
-
-
+	function removeslashes($string) {
+	    $string=implode("",explode("\\",$string));
+	    return stripslashes(trim($string));
+	}
 
 	/* Creat a Theme */
 	class Theme {
@@ -222,14 +220,7 @@
 
 		public function editTemplate ( $theme_name ) {
 			$o = get_option('newsletter_artisan');
-
-
-
-
 			$code = $o['themes'][$theme_name]['template'];
-
-
-//var_dump($code);
 
  			wp_editor($code, 'code_editor', 
  				array(
@@ -246,14 +237,10 @@
 
 				$o = get_option('newsletter_artisan');
 
-				$o['themes'][$theme_name]['template'] = htmlentities( $text , ENT_QUOTES );
+				$o['themes'][$theme_name]['template'] = removeslashes( $text );
 
 				update_option("newsletter_artisan", $o);
 			}
-
-//var_dump('save template: ', $o, $theme_name, $text);
-
-
 			echo "updated";
 		}
 
@@ -336,6 +323,8 @@
 		}
 		die();
 	}
+
+//var_dump( dirname(__FILE__), ABSPATH );
 
 //delete_option('newsletter_artisan');
 
